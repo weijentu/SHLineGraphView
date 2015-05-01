@@ -189,7 +189,7 @@
   CGPathMoveToPoint(graphPath, NULL, _leftMarginToLeave, plot.xPoints[0].y);
   CGPathMoveToPoint(backgroundPath, NULL, _leftMarginToLeave, plot.xPoints[0].y);
   
-  int count = _xAxisValues.count;
+  NSUInteger count = _xAxisValues.count;
   for(int i=0; i< count; i++){
     CGPoint point = plot.xPoints[i];
     CGPathAddLineToPoint(graphPath, NULL, point.x, point.y);
@@ -210,6 +210,10 @@
   backgroundLayer.path = backgroundPath;
   graphLayer.path = graphPath;
   circleLayer.path = circlePath;
+    
+    CFRelease(backgroundPath);
+    CFRelease(graphPath);
+    CFRelease(circlePath);
   
   //animation
   CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
@@ -242,7 +246,7 @@
 }
 
 - (void)drawXLabels:(SHPlot *)plot {
-  int xIntervalCount = _xAxisValues.count;
+  NSUInteger xIntervalCount = _xAxisValues.count;
   double xIntervalInPx = PLOT_WIDTH / _xAxisValues.count;
   
   //initialize actual x points values where the circle will be
@@ -341,6 +345,8 @@
   
   linesLayer.path = linesPath;
   [self.layer addSublayer:linesLayer];
+    
+    CFRelease(linesPath);
 }
 
 #pragma mark - UIButton event methods

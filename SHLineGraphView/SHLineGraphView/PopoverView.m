@@ -161,8 +161,13 @@
     UIFont *font = kTextFont;
     
     CGSize screenSize = [self screenSize];
-    CGSize textSize = [text sizeWithFont:font constrainedToSize:CGSizeMake(screenSize.width - kHorizontalMargin*4.f, 1000.f) lineBreakMode:UILineBreakModeWordWrap];
-    
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+    CGRect rect = [text boundingRectWithSize:CGSizeMake(screenSize.width - kHorizontalMargin*4.f, 1000.f)
+                                     options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
+                                  attributes:@{ NSParagraphStyleAttributeName : paragraphStyle }
+                                     context:nil];
+    CGSize textSize = rect.size;
     UILabel *textView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, textSize.width, textSize.height)];
     textView.backgroundColor = [UIColor clearColor];
     textView.userInteractionEnabled = NO;
@@ -180,7 +185,13 @@
     UIFont *font = kTextFont;
     
     CGSize screenSize = [self screenSize];
-    CGSize textSize = [text sizeWithFont:font constrainedToSize:CGSizeMake(screenSize.width - kHorizontalMargin*4.f, 1000.f) lineBreakMode:UILineBreakModeWordWrap];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+    CGRect rect = [text boundingRectWithSize:CGSizeMake(screenSize.width - kHorizontalMargin*4.f, 1000.f)
+                                     options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
+                                  attributes:@{ NSFontAttributeName : font }
+                                     context:nil];
+    CGSize textSize = rect.size;
     
     UILabel *textView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, textSize.width, textSize.height)];
     textView.backgroundColor = [UIColor clearColor];
@@ -269,7 +280,7 @@
     UIView *container = [[UIView alloc] initWithFrame:CGRectZero];
     
     //Create a label for the title text.
-    CGSize titleSize = [title sizeWithFont:kTitleFont];
+    CGSize titleSize = [title sizeWithAttributes:@{ NSFontAttributeName : kTitleFont }];
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.f, 0.f, titleSize.width, titleSize.height)];
     titleLabel.backgroundColor = [UIColor clearColor];
     titleLabel.font = kTitleFont;
@@ -356,7 +367,7 @@
     UIFont *font = kTextFont;
     
     for (NSString *string in stringArray) {
-        CGSize textSize = [string sizeWithFont:font];
+        CGSize textSize = [string sizeWithAttributes:@{ NSFontAttributeName : font }];
         UIButton *textButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, textSize.width, textSize.height)];
         textButton.backgroundColor = [UIColor clearColor];
         textButton.titleLabel.font = font;
@@ -381,7 +392,7 @@
     UIFont *font = kTextFont;
     
     for (NSString *string in stringArray) {
-        CGSize textSize = [string sizeWithFont:font];
+        CGSize textSize = [string sizeWithAttributes:@{ NSFontAttributeName : font }];
         UIButton *textButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, textSize.width, textSize.height)];
         textButton.backgroundColor = [UIColor clearColor];
         textButton.titleLabel.font = font;
@@ -428,7 +439,7 @@
         NSString *string = [stringArray objectAtIndex:i];
         
         //First we build a label for the text to set in.
-        CGSize textSize = [string sizeWithFont:font];
+        CGSize textSize = [string sizeWithAttributes:@{ NSFontAttributeName : font }];
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, textSize.width, textSize.height)];
         label.backgroundColor = [UIColor clearColor];
         label.font = font;
@@ -797,7 +808,7 @@
 
 - (void)didTapButton:(UIButton *)sender
 {
-    int index = [subviewsArray indexOfObject:sender];
+    NSUInteger index = [subviewsArray indexOfObject:sender];
     
     if (index == NSNotFound) {
         return;
